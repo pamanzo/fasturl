@@ -27,7 +27,7 @@ def shorten_url(
     return {"short_url": f"http://localhost:8000/{short_code}"}
 
 
-@router.get("/{short_code}", response_model=dict)
+@router.get("/redirect/{short_code}", response_model=dict)
 def redirect_to_original(
     short_code: str,
     request: Request,
