@@ -53,8 +53,9 @@ Para ejecutar el servidor de desarrollo, usa el siguiente comando:
 
 ## Endpoints
 
-- **POST /auth/signup:** Registra un nuevo usuario.
-- **POST /auth/login:** Inicia sesión con un usuario existente.
+- **POST /register:** Registra un nuevo usuario.
+- **POST /login:** Inicia sesión con un usuario existente.
 - **GET /urls:** Obtiene todos los enlaces de un usuario autenticado.
-- **POST /urls:** Crea un nuevo enlace acortado.
+- **POST /shorten:** Crea un nuevo enlace acortado.
+- **GET /redirect/{short_code}:** Obtiene en enlace original.
 - **DELETE /urls/{url_id}:** Elimina un enlace específico de un usuario autenticado.
