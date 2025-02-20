@@ -3,18 +3,10 @@ from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.orm import Session
 import string
 import random
-from ..database import SessionLocal
 from ..models import URL, Click
+from ..database import get_db
 
 router = APIRouter()
-
-
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
 
 
 def generate_short_code(length=6):
