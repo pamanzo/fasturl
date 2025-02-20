@@ -37,10 +37,10 @@ Asegúrate de tener los siguientes requisitos previos instalados:
 
 Antes de ejecutar la aplicación, asegúrate de crear un archivo `.env` en la raíz del proyecto con las siguientes variables de entorno:
 
-````env
+```env
 SECRET_KEY=tu_clave_secreta
 SQLALCHEMY_DATABASE_URL=sqlite:///./fasturl.db # ejemplo
-
+```
 
 ## Ejecución
 
@@ -48,8 +48,7 @@ Para ejecutar el servidor de desarrollo, usa el siguiente comando:
 
 ```bash
  uvicorn app.main:app --reload
-
-````
+```
 
 ## Endpoints
 
