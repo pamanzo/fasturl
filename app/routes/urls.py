@@ -1,6 +1,5 @@
 from datetime import datetime, timezone
 from fastapi import APIRouter, Depends, HTTPException, Request
-from fastapi.responses import RedirectResponse
 from sqlalchemy.orm import Session
 import string
 import random
@@ -22,7 +21,7 @@ def generate_short_code(length=6):
     return "".join(random.choices(string.ascii_letters + string.digits, k=length))
 
 
-def verify_code(short_code: str, db: Session = Depends(get_db)):
+def verify_code(short_code: str, db: Session):
     return db.query(URL).filter(URL.short_code == short_code).first()
 
 
@@ -30,7 +29,7 @@ def verify_code(short_code: str, db: Session = Depends(get_db)):
 def shorten_url(original_url: str, db: Session = Depends(get_db)):
     short_code = generate_short_code()
 
-    while verify_code(short_code) is not None:
+    while verify_code(short_code, db) is not None:
         short_code = generate_short_code()
 
     new_url = URL(original_url=original_url, short_code=short_code)
@@ -56,7 +55,4 @@ def redirect_to_original(
     db.add(new_click)
     db.commit()
 
-    if "docs" in str(request.headers.get("referer", "")):
-        return {"redirect_to": url_entry.original_url}
-
-    return RedirectResponse(url_entry.original_url)
+    return {"redirect_to": url_entry.original_url}
