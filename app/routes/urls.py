@@ -1,24 +1,18 @@
 from datetime import datetime, timezone
 from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.orm import Session
-import string
-import random
-from ..models import URL, Click
-from ..database import get_db
+from app.routes.auth import verify_user_logged_in
+from app.models import URL, Click
+from app.database import get_db
+from app.utils import generate_short_code, verify_code
 
 router = APIRouter()
 
 
-def generate_short_code(length=6):
-    return "".join(random.choices(string.ascii_letters + string.digits, k=length))
-
-
-def verify_code(short_code: str, db: Session):
-    return db.query(URL).filter(URL.short_code == short_code).first()
-
-
 @router.post("/shorten")
-def shorten_url(original_url: str, db: Session = Depends(get_db)):
+def shorten_url(
+    original_url: str, db: Session = Depends(get_db), _=Depends(verify_user_logged_in)
+):
     short_code = generate_short_code()
 
     while verify_code(short_code, db) is not None:
@@ -33,7 +27,10 @@ def shorten_url(original_url: str, db: Session = Depends(get_db)):
 
 @router.get("/{short_code}", response_model=dict)
 def redirect_to_original(
-    short_code: str, request: Request, db: Session = Depends(get_db)
+    short_code: str,
+    request: Request,
+    db: Session = Depends(get_db),
+    _=Depends(verify_user_logged_in),
 ):
     url_entry = db.query(URL).filter(URL.short_code == short_code).first()
 
