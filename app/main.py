@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from .database import engine, Base
-from router import router
+from app.router import router
 
 app = FastAPI()
 app.include_router(router)
