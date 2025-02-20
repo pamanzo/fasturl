@@ -1,6 +1,6 @@
 import string
 import random
-from models import URL
+from app.models import URL
 from sqlalchemy.orm import Session
 
 
